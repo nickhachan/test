@@ -101,4 +101,4 @@ keys.forEach(a=>{
     }
 })()
 type[1].e.click()
-'hahah'
+console.log('haha')
