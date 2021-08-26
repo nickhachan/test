@@ -36,25 +36,11 @@ keys.forEach(a=>{
         reset=$('.func-button-reset'),
         copy=$('.func-button-copy'),
         cheat=$('.func-button.func-cheat'),
-        canvas=$('.result__img'),
-        ctx=canvas.getContext('2d');
-    function changeCanvas(e){
-        var pos=[10,30],m='',width=500;
-        canvas.width=calc2.clientWidth
-        for(var i of e){
-            console.log(pos,i)
-            if(pos[1]>canvas.height)canvas.height=pos[1]+20
-            if(pos[0]<canvas.width){
-                ctx.fillText(i,pos[0],pos[1],width)
-                pos[0]+=20
-            }else{
-                pos[0]=0
-                pos[1]+=40
-                ctx.fillText(i,pos[0],pos[1],width)
-            }
-            
-        }
+        post=$('.result__img');
+    window.onresize=()=>{
+        speCalc()
     }
+    cheat.onchange=()=>speCalc()
     function speCalc(){
         var x=calc2.value.replace(/[\d\)]\(/g,e=>e[0]+'*'+e[1]).replace(/:/g,'/').replace(/\^\d+/g,e=>'**'+e.slice(1)).replace(/\-\(/g,'-1*(').replace(/&([^xy]*[xy][^xy]*)+\n/g,''),r=[x];
         x=x.replace(/\([+-]*[\d\.]+\)\*\*[+-]*[\d\.]+|[+-]*[\d\.]+\*\*[+-]*[\d\.]+/g,e=>e.replace(/[\(\)]/g,'').split('**').reduce((a,b)=>a**b))
@@ -67,13 +53,13 @@ keys.forEach(a=>{
         if(cheat.checked&&'='+x!=r[r.length-1])r.push('='+x)
         r=r.length>1?r.join(''):x;
         r= r.replace(/[a-zA-Z=]/g,' $& ').replace(/\d\.\d+/g,e=>e.length>5?(+e).toFixed(5):e)
-        changeCanvas(r)
+        post.textContent=r
     };
     calc2.onchange=(e)=>{
         speCalc()
     };
     reset.onclick=()=>{calc2.value=''}
-    copy.onclick=()=>{navigator.clipboard.writeText(calc2.value)}
+    copy.onclick=()=>{navigator.clipboard.writeText(post.textContent)}
 })();
 (()=>{
     var x=$('#objBase'), inp=$('.obj-func'),out=$('.obj-out'),hold=$('.obj-holder'),cas='',t={}
