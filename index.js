@@ -64,7 +64,7 @@ keys.forEach(a=>{
 (()=>{
     var x=$('#objBase'), inp=$('.obj-func'),out=$('.obj-out'),hold=$('.obj-holder'),cas='',t={}
     function calcIt(){
-        out.innerHTML=eval(cas.replace(/[a-zA-Z]/g,'t["$&"]').replace(/\d+[\(a-zA-Z]/g,e=>e.slice(0,-1)+'*'+e.slice(-1)))
+        out.innerHTML=eval(cas.replace(/[a-zA-Z]+/g,'t["$&"]').replace(/\d+[\(a-zA-Z]/g,e=>e.slice(0,-1)+'*'+e.slice(-1)))
     }
     inp.onchange=(e)=>{
         e=e.target.value
