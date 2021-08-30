@@ -40,20 +40,35 @@ keys.forEach(a=>{
     window.onresize=()=>{
         speCalc()
     }
+    function seperate(a){
+        var reg=/(\([\d\+\-\/\.]+\)|[\d\.]+)\/(\([[\d\.]\+\-\/\.]+\)|[\d\.]+)|[\d\.]+\/[\d\.]+/
+        while(reg.test(a)){
+            a=a.replace(reg,function(a){
+                return '<div class="math__del">'+ a.split('/').map(e=>'<span>'+e+'</span>').join('<div class="seperate"></div>')+'</div>'
+            })
+        }
+        post.innerHTML=a.replace(/\n/g,'<br/>')
+    }
     cheat.onchange=()=>speCalc()
     function speCalc(){
-        var x=calc2.value.replace(/[\d\)]\(/g,e=>e[0]+'*'+e[1]).replace(/:/g,'/').replace(/\^\d+/g,e=>'**'+e.slice(1)).replace(/\-\(/g,'-1*(').replace(/&([^xy]*[xy][^xy]*)+\n/g,''),r=[x];
-        x=x.replace(/\([+-]*[\d\.]+\)\*\*[+-]*[\d\.]+|[+-]*[\d\.]+\*\*[+-]*[\d\.]+/g,e=>e.replace(/[\(\)]/g,'').split('**').reduce((a,b)=>a**b))
-        if(cheat.checked&&x!=r[0])r.push('='+x)
-        while(/\([\+\-\*\/\d\.]+\)/.test(x))x= x.replace(/\([\+\-\*\/\d\.]+\)/g,e=>eval(e))
-        if(cheat.checked&&'='+x!=r[r.length-1])r.push('='+x)
-        x=x.replace(/\([+-]*[\d\.]+\)\*\*[+-]*\d+|[+-]{0,1}[\d\.]+\*\*[+-]*\d+/g,e=>e.replace(/[\(\)]/g,'').split('**').reduce((a,b)=>a**b))
-        if(cheat.checked&&x!=r[0])r.push('='+x)
-        x=x.replace(/[\d\+\-\*\/\. ]+/g,(e)=>eval(e))
-        if(cheat.checked&&'='+x!=r[r.length-1])r.push('='+x)
-        r=r.length>1?r.join(''):x;
-        r= r.replace(/[a-zA-Z=]/g,' $& ').replace(/\d\.\d+/g,e=>e.length>5?(+e).toFixed(5):e)
-        post.textContent=r
+        var y=calc2.value.replace(/[\d\)]\(/g,e=>e[0]+'*'+e[1]).replace(/:/g,'/').replace(/\^\d+/g,e=>'**'+e.slice(1)).replace(/\-\(/g,'-1*(').replace(/&([^xy]*[xy][^xy]*)+\n/g,''),z='';
+        for(var x of y.split('\n')){
+            var last=''
+            x= x.replace(/\?[^ ]/,e=>{last=e.slice(1);return ''})
+            var r=[x]
+            x=x.replace(/\([+-]*[\d\.]+\)\*\*[+-]*[\d\.]+|[+-]*[\d\.]+\*\*[+-]*[\d\.]+/g,e=>e.replace(/[\(\)]/g,'').split('**').reduce((a,b)=>a**b))
+            if(cheat.checked&&x!=r[0])r.push('='+x)
+            while(/\([\+\-\*\/\d\.]+\)/.test(x))x= x.replace(/\([\+\-\*\/\d\.]+\)/g,e=>eval(e))
+            if(cheat.checked&&!r[r.length-1].includes(x))r.push('='+x)
+            x=x.replace(/\([+-]*[\d\.]+\)\*\*[+-]*\d+|[+-]{0,1}[\d\.]+\*\*[+-]*\d+/g,e=>e.replace(/[\(\)]/g,'').split('**').reduce((a,b)=>a**b))
+            if(cheat.checked&&!r[r.length-1].includes(x))r.push('='+x)
+            x=x.replace(/[\d\+\-\*\/\. ]+/g,(e)=>eval(e))
+            if(cheat.checked&&!r[r.length-1].includes(x))r.push('='+x)
+            r=r.length>1?r.join(''):x;
+            r= r.replace(/[a-zA-Z=]/g,' $& ').replace(/\d\.\d+/g,e=>e.length>5?(+e).toFixed(5):e)
+            z+=r+last+'\n'
+        }
+        seperate(z)
     };
     calc2.onchange=(e)=>{
         speCalc()

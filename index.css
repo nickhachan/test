@@ -90,14 +90,28 @@ background-image:linear-gradient(70deg,orange,blue);
     text-align: center;
 }
 .result__img{
-    display: block;
+    display: flex;
     width: 100%;
     background-color: white;
     font-size: 20px;
     background-color: white;
-    text-align: right;
+    justify-content: right;
+    align-items: center;
     padding: 10px 20px;
     margin-top: 10px;
     box-sizing: border-box;
     border: 1px solid black;
+    flex-wrap: wrap;
+}
+.math__del{
+    display: flex;
+    flex-direction: column;
+    width: max-content;
+    margin: 0 7px;
+    line-height: 30px;
+    align-items: center;
+}
+.seperate{
+    border-bottom: 1px solid black;
+    width: 100%;
 }
